@@ -21,6 +21,7 @@ export default function App() {
   const [obstaclesWidth2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
   const obstaclesHeight = 225
   const gap = 250
+  const [score ,setScore]=useState(0)
   const [isGameOver,setGameOver]=useState(false)
 
 
@@ -81,21 +82,27 @@ useEffect(() => {
 useEffect(() => {
  if (
    ((birdBottom<=obstaclesHeight+randomBottom)&&(obstaclesWidth==birdLeft)||
- (birdBottom>obstaclesHeight+randomBottom+80)&&(obstaclesWidth==birdLeft))||
+ (birdBottom>(screenHeight-(obstaclesHeight+randomBottom-70)))&&(obstaclesWidth==birdLeft || obstaclesWidth==birdLeft-70))||
 
  ((birdBottom<=obstaclesHeight+randomBottom2)&&(obstaclesWidth2==birdLeft)||
- (birdBottom>obstaclesHeight+randomBottom2+40)&&(obstaclesWidth2==birdLeft)))
+ (birdBottom>(screenHeight-(obstaclesHeight+randomBottom2-70)))&&(obstaclesWidth2==birdLeft || obstaclesWidth2==birdLeft-70)))
 {
   console.log(`gameOver`) 
+  
   gameOver()
 }
+else{
+  setScore(score=>score+1)
+  console.log(score)
+}
+
 })
 
 const gameOver=() => {
+  setGameOver(true)
   clearInterval(gameTimerId)
   clearInterval(gameTimerId2)
   clearInterval(gameTimerId3)
-  setGameOver(true)
 }
   return (
     <TouchableWithoutFeedback onPress={jump}>
@@ -115,6 +122,9 @@ const gameOver=() => {
         random={randomBottom2}
         obstaclesHeight={obstaclesHeight}
         gap={gap} />
+        {isGameOver&& score&&<View style={{height:screenHeight/3,width:screenWidth/3}}>
+          <Text>Your Score is  {score}</Text>
+          </View>}
     </View>
     </TouchableWithoutFeedback>
   )
