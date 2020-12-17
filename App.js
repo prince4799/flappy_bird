@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, Dimensions,TouchableWithoutFeedback } from 'react-native';
 import Bird from './components/bird'
 import Obstacles from './components/obstacles'
 
@@ -21,13 +21,14 @@ export default function App() {
   const [obstaclesWidth2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
   const obstaclesHeight = 225
   const gap = 250
+  const [isGameOver,setGameOver]=useState(false)
 
 
   useEffect(() => {
-    if (birdBottom > 0) {
+    if (birdBottom >0) {
       gameTimerId = setInterval(() => {
-        setBirdBottom(birdBottom => birdBottom - gravity)
-        console.log(Math.floor(birdBottom)+"  birdBottom")
+        setBirdBottom(birdBottom => birdBottom-gravity)
+        // console.log(Math.floor(birdBottom)+"  birdBottom")
       }, 120)
       return () => { clearInterval(gameTimerId) }
     }
@@ -49,6 +50,15 @@ export default function App() {
     }
 },[obstaclesWidth])
 
+//jumping  Functions
+
+const jump=()=>{ 
+  if(!isGameOver&&(birdBottom<screenHeight))
+  {
+    setBirdBottom(birdBottom=> birdBottom+50)
+    console.log(`jumping`)
+  }
+}
 
 useEffect(() => {
   if (obstaclesWidth2>-50)
@@ -56,7 +66,7 @@ useEffect(() => {
     gameTimerId3=setInterval(()=>{ 
       setObstaclesWidth2(obstaclesWidth2=>obstaclesWidth2-20)
     },105)
-    console.log(obstaclesWidth2+" obstacleWidth2")
+    // console.log(obstaclesWidth2+" obstacleWidth2")
     return()=>{ clearInterval(gameTimerId3)}
   }
   else{
@@ -69,18 +79,26 @@ useEffect(() => {
 //check for collosion
 
 useEffect(() => {
- if ((birdBottom<obstaclesHeight+2*randomBottom2+gap+150)&&(obstaclesWidth2==screenWidth/2+10)||
- (birdBottom>obstaclesHeight+randomBottom)&&(obstaclesWidth==screenWidth/2+10))
+ if (
+   ((birdBottom<=obstaclesHeight+randomBottom)&&(obstaclesWidth==birdLeft)||
+ (birdBottom>obstaclesHeight+randomBottom+80)&&(obstaclesWidth==birdLeft))||
+
+ ((birdBottom<=obstaclesHeight+randomBottom2)&&(obstaclesWidth2==birdLeft)||
+ (birdBottom>obstaclesHeight+randomBottom2+40)&&(obstaclesWidth2==birdLeft)))
 {
-  console.log(`gameOver`)
-  clearInterval(gameTimerId)
-  clearInterval(gameTimerId2)
-  clearInterval(gameTimerId3)
+  console.log(`gameOver`) 
+  gameOver()
 }
 })
 
-
+const gameOver=() => {
+  clearInterval(gameTimerId)
+  clearInterval(gameTimerId2)
+  clearInterval(gameTimerId3)
+  setGameOver(true)
+}
   return (
+    <TouchableWithoutFeedback onPress={jump}>
     <View style={styles.container}>
       <Bird
         birdBottom={birdBottom}
@@ -98,7 +116,8 @@ useEffect(() => {
         obstaclesHeight={obstaclesHeight}
         gap={gap} />
     </View>
-  );
+    </TouchableWithoutFeedback>
+  )
 }
 
 const styles = StyleSheet.create({
