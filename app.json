@@ -16,17 +16,16 @@
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package":"com.yourcompany.flappy"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "simple flappy game"
   }
 }

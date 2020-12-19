@@ -9,19 +9,6 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
             {/* obstacle upside */}
         <View
         style={{
-           height:obstaclesHeight+random-70,
-           width:70,
-           left:obstaclesWidth,
-           backgroundColor:color,
-           borderWidth:2,
-           borderColor:'black',
-           borderRadius:20,
-           position:'absolute'
-        }}
-        />
-        {/* //obstacle Down */}
-        <View
-        style={{
            height:obstaclesHeight+random,
            width:70,
            left:obstaclesWidth,
@@ -29,9 +16,24 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
            borderWidth:2,
            borderColor:'black',
            borderRadius:20,
-           top:random+150+gap,
            position:'absolute',
-           bottom:0,
+           top:0,
+        
+        }}
+        />
+        {/* //obstacle Down */}
+        <View
+        style={{
+           height:obstaclesHeight+random+gap,
+           width:70,
+           left:obstaclesWidth,
+           backgroundColor:color,
+           borderWidth:2,
+           borderColor:'white',
+           borderRadius:20,
+           top:obstaclesHeight+gap+random,
+           position:'absolute',
+        //    justifyContent:'flex-end',
         }}
         />
         </View>
