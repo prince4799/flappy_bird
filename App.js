@@ -19,7 +19,7 @@ export default function App() {
   const gravity = 15
   const [obstaclesWidth,setObstaclesWidth] =useState(screenWidth) 
   const [obstaclesWidth2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
-  const obstaclesHeight = 200
+  const obstaclesHeight =300
   const gap = 150
   const [score ,setScore]=useState(0)
   const [isGameOver,setGameOver]=useState(false)
@@ -47,7 +47,7 @@ export default function App() {
     }
     else{
       setObstaclesWidth(screenWidth/2+screenWidth+60)
-      setRandomBottom(Math.random()*150)
+      setRandomBottom(Math.random()*100)
       setScore(score+1)
     }
 },[obstaclesWidth])
@@ -81,22 +81,24 @@ useEffect(() => {
 
 useEffect(() => {
  if (
-   ((birdBottom<=obstaclesHeight+randomBottom+gap)&&(obstaclesWidth==birdLeft||obstaclesWidth==birdLeft+70)||
- (birdBottom>=(screenHeight-(obstaclesHeight+randomBottom)))&&(obstaclesWidth==birdLeft || obstaclesWidth==birdLeft-70))||
+   ((birdBottom<=obstaclesHeight-randomBottom)&&(obstaclesWidth >= birdLeft||obstaclesWidth<=birdLeft-70)||
+ (birdBottom>=(screenHeight-(obstaclesHeight-randomBottom)))&&(obstaclesWidth>=birdLeft||obstaclesWidth<=birdLeft-70))||
 
- ((birdBottom<=obstaclesHeight+randomBottom2+gap)&&(obstaclesWidth2==birdLeft||obstaclesWidth2==birdLeft+70)||
- (birdBottom>=(screenHeight-(obstaclesHeight+randomBottom2)))&&(obstaclesWidth2==birdLeft || obstaclesWidth2==birdLeft-70)))
+ ((birdBottom<=obstaclesHeight-randomBottom2)&&(obstaclesWidth2>=birdLeft||obstaclesWidth2<=birdLeft-70)||
+ (birdBottom>=(screenHeight-(obstaclesHeight-randomBottom2)))&&(obstaclesWidth2>=birdLeft||obstaclesWidth2<=birdLeft-70)))
 {
+  // console.log("gameOver bet`e")
   gameOver()
 }
 })
-
 const gameOver=() => {
-  setGameOver(!isGameOver)
+  // console.log("gameOver bet`e")
+  console.log(score)
+  setGameOver(true)
   clearInterval(gameTimerId)
   clearInterval(gameTimerId2)
   clearInterval(gameTimerId3)
-  console.log(score)
+  console.log("gameOver bet`end of game... reload")
 }
   return (
     <TouchableWithoutFeedback onPress={jump}>
@@ -104,20 +106,7 @@ const gameOver=() => {
       <Bird
         birdBottom={birdBottom}
         birdLeft={birdLeft} />
-        <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isGameOver}
-        onRequestClose={() => {
-          Alert.alert("Thank you!!");
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>{score}</Text>
-          </View>
-        </View>
-      </Modal>
+       
       <Obstacles
         obstaclesWidth={obstaclesWidth}
         color={'red'}
@@ -126,12 +115,17 @@ const gameOver=() => {
         gap={gap} />
       <Obstacles
         obstaclesWidth={obstaclesWidth2}
-        color={'coral'}
+        color={'red'}
         random={randomBottom2}
         obstaclesHeight={obstaclesHeight}
         gap={gap} />
+       {isGameOver&& <View style={styles.centeredView}>
+            <Text style={{fontSize:40}}>{score}</Text>
+        </View>
+}
     </View>
     </TouchableWithoutFeedback>
+  
   )
 }
 
@@ -141,17 +135,25 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
   },
   centeredView: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    backgroundColor: "black",
+    alignSelf:'center',
+    height:180,
+    width:250,
+    elevation:10,
+    top:280,
+    borderWidth:2,
+    borderColor:'white',
+    borderRadius:20
+    // bottom:50
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    elevation: 5
-  },
+  // modalView: {
+  //   margin: 20,
+  //   backgroundColor: "white",
+  //   borderRadius: 20,
+  //   // padding: 35,
+  //   alignItems: "center",
+  //   elevation: 5
+  // },
 });

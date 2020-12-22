@@ -1,15 +1,15 @@
 import React from 'react'
-import {View,} from 'react-native'
+import {View,Dimensions} from 'react-native'
 
 export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,random}){
-    
+    const Height=Dimensions.get("screen").height
     
     return(
         <View style={{flexDirection:'row'}}>
             {/* obstacle upside */}
         <View
         style={{
-           height:obstaclesHeight+random,
+           height:obstaclesHeight-random,
            width:70,
            left:obstaclesWidth,
            backgroundColor:color,
@@ -24,16 +24,16 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
         {/* //obstacle Down */}
         <View
         style={{
-           height:obstaclesHeight+random+gap,
+           height:obstaclesHeight-random,
            width:70,
            left:obstaclesWidth,
            backgroundColor:color,
            borderWidth:2,
            borderColor:'white',
            borderRadius:20,
-           top:obstaclesHeight+gap+random,
            position:'absolute',
-        //    justifyContent:'flex-end',
+           top:Height-(obstaclesHeight-random),
+           bottom:0
         }}
         />
         </View>
