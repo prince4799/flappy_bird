@@ -1,6 +1,15 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Dimensions,TouchableWithoutFeedback,Modal,Alert,TouchableHighlight } from 'react-native';
+import { 
+  StyleSheet,
+    Text,
+    SafeAreaView,
+    View,
+    Dimensions,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+    Image
+   } from 'react-native';
 import Bird from './components/bird'
 import Obstacles from './components/obstacles'
 
@@ -19,13 +28,12 @@ export default function App() {
   const gravity = 15
   const [obstaclesWidth,setObstaclesWidth] =useState(screenWidth) 
   const [obstaclesWidth2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
-  const obstaclesHeight =300
+  const obstaclesHeight =250
   const gap = 150
   const [score ,setScore]=useState(0)
   const [isGameOver,setGameOver]=useState(false)
-  // const 
 
-
+  
   useEffect(() => {
     if (birdBottom >0) {
       gameTimerId = setInterval(() => {
@@ -80,20 +88,22 @@ useEffect(() => {
 //check for collosion
 
 useEffect(() => {
- if (
-   ((birdBottom<=obstaclesHeight-randomBottom)&&(obstaclesWidth >= birdLeft||obstaclesWidth<=birdLeft-70)||
- (birdBottom>=(screenHeight-(obstaclesHeight-randomBottom)))&&(obstaclesWidth>=birdLeft||obstaclesWidth<=birdLeft-70))||
+if((birdBottom<=(obstaclesHeight-randomBottom)||birdBottom<=(obstaclesHeight-randomBottom2)
+ ||birdBottom>=(screenHeight-(obstaclesHeight-randomBottom))||birdBottom>=(screenHeight-(obstaclesHeight-randomBottom2)))&&
+ ((birdLeft>=obstaclesWidth||birdLeft>=obstaclesWidth2-70)
+ &&(birdLeft<=obstaclesWidth||birdLeft<=obstaclesWidth2-70))
+ )
 
- ((birdBottom<=obstaclesHeight-randomBottom2)&&(obstaclesWidth2>=birdLeft||obstaclesWidth2<=birdLeft-70)||
- (birdBottom>=(screenHeight-(obstaclesHeight-randomBottom2)))&&(obstaclesWidth2>=birdLeft||obstaclesWidth2<=birdLeft-70)))
 {
-  // console.log("gameOver bet`e")
   gameOver()
-}
+}  
+
 })
 const gameOver=() => {
-  // console.log("gameOver bet`e")
   console.log(score)
+  // setGameOver(false)
+  
+  
   setGameOver(true)
   clearInterval(gameTimerId)
   clearInterval(gameTimerId2)
@@ -102,7 +112,7 @@ const gameOver=() => {
 }
   return (
     <TouchableWithoutFeedback onPress={jump}>
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Bird
         birdBottom={birdBottom}
         birdLeft={birdLeft} />
@@ -120,10 +130,17 @@ const gameOver=() => {
         obstaclesHeight={obstaclesHeight}
         gap={gap} />
        {isGameOver&& <View style={styles.centeredView}>
-            <Text style={{fontSize:40}}>{score}</Text>
+            <Text style={styles.score}>Your Score</Text>
+            <Text style={styles.score}>{score}</Text>
+            <TouchableOpacity style={styles.button} >
+              <Text style={styles.buttonText}>Try again</Text>
+              <Image
+              source={{uri:'https://www.tbray.org/ongoing/When/201x/2017/09/27/refresh.png'}}
+              style={styles.buttonImage}/>
+              </TouchableOpacity>
         </View>
 }
-    </View>
+    </SafeAreaView>
     </TouchableWithoutFeedback>
   
   )
@@ -135,9 +152,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'skyblue',
   },
   centeredView: {
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "black",
+    backgroundColor: "grey",
     alignSelf:'center',
     height:180,
     width:250,
@@ -145,15 +160,32 @@ const styles = StyleSheet.create({
     top:280,
     borderWidth:2,
     borderColor:'white',
-    borderRadius:20
-    // bottom:50
+    borderRadius:20,
+    justifyContent:'center'
   },
-  // modalView: {
-  //   margin: 20,
-  //   backgroundColor: "white",
-  //   borderRadius: 20,
-  //   // padding: 35,
-  //   alignItems: "center",
-  //   elevation: 5
-  // },
+  score:{
+    fontSize:32,
+    alignSelf:'center',
+  },
+  buttonText:
+  {
+    // backgroundColor:"red"
+
+},
+button:
+{
+  height:60,
+  width:70,
+  alignSelf:'center',
+  borderWidth:2.5,
+  backgroundColor:'#fff',
+  borderRadius:10
+
+},
+buttonImage:
+{
+  height:25,
+  width:25,
+  alignSelf:'center',
+}
 });
