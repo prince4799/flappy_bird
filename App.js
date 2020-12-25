@@ -15,6 +15,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Bird from './components/bird'
 import Obstacles from './components/obstacles'
+import { LinearGradient } from 'expo-linear-gradient';
 
 
 
@@ -29,12 +30,13 @@ import Obstacles from './components/obstacles'
   let gameTimerId2
   let gameTimerId3
   const gravity = 15
-  const [obstaclesWidth,setObstaclesWidth] =useState(screenWidth) 
-  const [obstaclesWidth2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
+  const [obstaclesRightSpace,setObstaclesWidth] =useState(screenWidth) 
+  const [obstaclesRightSpace2,setObstaclesWidth2] =useState(screenWidth/2+screenWidth+60) 
   const obstaclesHeight =250
   const gap = 150
   const [score ,setScore]=useState(0)
   const [isGameOver,setGameOver]=useState(false)
+  const [gradient,setGradient]=useState(['coral','orange'])
 
   
   useEffect(() => {
@@ -49,10 +51,10 @@ import Obstacles from './components/obstacles'
   }, [birdBottom])
 
   useEffect(() => {
-    if (obstaclesWidth>-50)
+    if (obstaclesRightSpace>-50)
     {
       gameTimerId2=setInterval(()=>{ 
-        setObstaclesWidth(obstaclesWidth=>obstaclesWidth-20)
+        setObstaclesWidth(obstaclesRightSpace=>obstaclesRightSpace-20)
       },105)
       return()=>{ clearInterval(gameTimerId2)}
     }
@@ -61,7 +63,7 @@ import Obstacles from './components/obstacles'
       setRandomBottom(Math.random()*100)
       setScore(score+1)
     }
-},[obstaclesWidth])
+},[obstaclesRightSpace])
 
 //jumping  Functions
 
@@ -79,10 +81,10 @@ navigation.push('Home')
 }
 
 useEffect(() => {
-  if (obstaclesWidth2>-50)
+  if (obstaclesRightSpace2>-50)
   {
     gameTimerId3=setInterval(()=>{ 
-      setObstaclesWidth2(obstaclesWidth2=>obstaclesWidth2-20)
+      setObstaclesWidth2(obstaclesRightSpace2=>obstaclesRightSpace2-20)
     },105)
     return()=>{ clearInterval(gameTimerId3)}
   }
@@ -92,16 +94,34 @@ useEffect(() => {
     setScore(score+1)
     // setScore(0)
   }
-},[obstaclesWidth2])
+},[obstaclesRightSpace2])
 
 
 //check for collosion
 
 useEffect(() => {
-if((birdBottom<=(obstaclesHeight-randomBottom)||birdBottom<=(obstaclesHeight-randomBottom2)
-||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom))||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom2)))&&
-((birdLeft+60<=obstaclesWidth&&birdLeft>=obstaclesWidth-70)
-||(birdLeft+60<=obstaclesWidth2&&birdLeft>=obstaclesWidth2-70))
+// if(
+//   (birdBottom<=(obstaclesHeight-randomBottom)
+//   ||birdBottom<=(obstaclesHeight-randomBottom2)
+//   ||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom))
+//   ||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom2))
+//   )
+// &&(
+//   (birdLeft+60>=obstaclesRightSpace&&birdLeft<=obstaclesRightSpace)||
+//   (birdLeft+60>obstaclesRightSpace2&&birdLeft<=obstaclesRightSpace2))
+// )
+if(
+ ( 
+   (birdBottom<=(obstaclesHeight-randomBottom)||
+   birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom)))&&
+   (birdLeft>=obstaclesRightSpace&&birdLeft<=obstaclesRightSpace+70)
+ )
+  ||
+  (
+    (birdBottom<=(obstaclesHeight-randomBottom2)||
+    birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom2)))&&
+    (birdLeft>=obstaclesRightSpace2&&birdLeft<=obstaclesRightSpace2+70)
+  )
 )
 {
   // setGameOver(false)
@@ -122,19 +142,20 @@ else{
 // }
   return (
     <TouchableWithoutFeedback onPress={jump}>
-    <SafeAreaView style={styles.container}>
+    <LinearGradient
+    colors={gradient} style={styles.container}>
       <Bird
         birdBottom={birdBottom}
         birdLeft={birdLeft} />
        
       <Obstacles
-        obstaclesWidth={obstaclesWidth}
+        obstaclesRightSpace={obstaclesRightSpace}
         color={'green'}
         obstaclesHeight={obstaclesHeight}
         random={randomBottom}
         gap={gap} />
       <Obstacles
-        obstaclesWidth={obstaclesWidth2}
+        obstaclesRightSpace={obstaclesRightSpace2}
         color={'green'}
         random={randomBottom2}
         obstaclesHeight={obstaclesHeight}
@@ -150,7 +171,7 @@ else{
               </TouchableOpacity>
         </View>
 }
-    </SafeAreaView>
+    </LinearGradient>
     </TouchableWithoutFeedback>
   
   )
@@ -159,7 +180,7 @@ else{
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'skyblue',
+    // backgroundColor: 'skyblue',
   },
   centeredView: {
     backgroundColor: "grey",

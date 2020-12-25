@@ -1,7 +1,7 @@
 import React from 'react'
 import {View,Dimensions} from 'react-native'
 
-export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,random}){
+export default function Obstacles({obstaclesRightSpace,obstaclesHeight,gap,color,random}){
     const Height=Dimensions.get("screen").height
     
     return(
@@ -11,7 +11,7 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
         style={{
            height:obstaclesHeight-random,
            width:70,
-           left:obstaclesWidth,
+           left:obstaclesRightSpace,
            backgroundColor:color,
            borderWidth:2,
            borderColor:'black',
@@ -26,7 +26,7 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
         style={{
            height:obstaclesHeight-random,
            width:70,
-           left:obstaclesWidth,
+           left:obstaclesRightSpace,
            backgroundColor:color,
            borderWidth:2,
            borderColor:'black',
