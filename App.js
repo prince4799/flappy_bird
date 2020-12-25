@@ -106,12 +106,12 @@ if((birdBottom<=(obstaclesHeight-randomBottom)||birdBottom<=(obstaclesHeight-ran
 {
   
   
-  setGameOver(false)
-  // setGameOver(true)
-  // clearInterval(gameTimerId)
-  // clearInterval(gameTimerId2)
-  // clearInterval(gameTimerId3)
-  // setScore(score)
+  // setGameOver(false)
+  setGameOver(true)
+  clearInterval(gameTimerId)
+  clearInterval(gameTimerId2)
+  clearInterval(gameTimerId3)
+  setScore(score)
   console.log("gameOver bet`end of game... reload")
 }  
 else{
