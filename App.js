@@ -104,8 +104,6 @@ if((birdBottom<=(obstaclesHeight-randomBottom)||birdBottom<=(obstaclesHeight-ran
 ||(birdLeft+60<=obstaclesWidth2&&birdLeft>=obstaclesWidth2-70))
 )
 {
-  
-  
   // setGameOver(false)
   setGameOver(true)
   clearInterval(gameTimerId)
