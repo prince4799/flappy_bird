@@ -1,4 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
+
 import React, { useEffect, useState } from 'react';
 import { 
   StyleSheet,
@@ -10,12 +11,14 @@ import {
     TouchableOpacity,
     Image
    } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 import Bird from './components/bird'
 import Obstacles from './components/obstacles'
 
 
 
-export default function App() {
+ function HomeScreen({navigation}) {
   const screenWidth = Dimensions.get("screen").width
   const screenHeight = Dimensions.get("screen").height
   const birdLeft = screenWidth / 2
@@ -69,6 +72,12 @@ const jump=()=>{
   }
 }
 
+const restart=()=>{
+setGameOver(false)
+setScore(0)
+navigation.push('Home')
+}
+
 useEffect(() => {
   if (obstaclesWidth2>-50)
   {
@@ -81,6 +90,7 @@ useEffect(() => {
     setObstaclesWidth2(screenWidth/2+screenWidth+60)
     setRandomBottom2(Math.random()*150)
     setScore(score+1)
+    // setScore(0)
   }
 },[obstaclesWidth2])
 
@@ -89,27 +99,29 @@ useEffect(() => {
 
 useEffect(() => {
 if((birdBottom<=(obstaclesHeight-randomBottom)||birdBottom<=(obstaclesHeight-randomBottom2)
- ||birdBottom>=(screenHeight-(obstaclesHeight-randomBottom))||birdBottom>=(screenHeight-(obstaclesHeight-randomBottom2)))&&
- ((birdLeft>=obstaclesWidth||birdLeft>=obstaclesWidth2-70)
- &&(birdLeft<=obstaclesWidth||birdLeft<=obstaclesWidth2-70))
- )
-
+||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom))||birdBottom+50>=(screenHeight-(obstaclesHeight-randomBottom2)))&&
+((birdLeft+60<=obstaclesWidth&&birdLeft>=obstaclesWidth-70)
+||(birdLeft+60<=obstaclesWidth2&&birdLeft>=obstaclesWidth2-70))
+)
 {
-  gameOver()
-}  
-
-})
-const gameOver=() => {
-  console.log(score)
-  // setGameOver(false)
   
   
-  setGameOver(true)
-  clearInterval(gameTimerId)
-  clearInterval(gameTimerId2)
-  clearInterval(gameTimerId3)
+  setGameOver(false)
+  // setGameOver(true)
+  // clearInterval(gameTimerId)
+  // clearInterval(gameTimerId2)
+  // clearInterval(gameTimerId3)
+  // setScore(score)
   console.log("gameOver bet`end of game... reload")
+}  
+else{
+  console.log(score)
 }
+})
+
+// const gameOver=() => {
+  
+// }
   return (
     <TouchableWithoutFeedback onPress={jump}>
     <SafeAreaView style={styles.container}>
@@ -119,20 +131,20 @@ const gameOver=() => {
        
       <Obstacles
         obstaclesWidth={obstaclesWidth}
-        color={'red'}
+        color={'green'}
         obstaclesHeight={obstaclesHeight}
         random={randomBottom}
         gap={gap} />
       <Obstacles
         obstaclesWidth={obstaclesWidth2}
-        color={'red'}
+        color={'green'}
         random={randomBottom2}
         obstaclesHeight={obstaclesHeight}
         gap={gap} />
        {isGameOver&& <View style={styles.centeredView}>
             <Text style={styles.score}>Your Score</Text>
             <Text style={styles.score}>{score}</Text>
-            <TouchableOpacity style={styles.button} >
+            <TouchableOpacity style={styles.button} onPress={restart} >
               <Text style={styles.buttonText}>Try again</Text>
               <Image
               source={{uri:'https://www.tbray.org/ongoing/When/201x/2017/09/27/refresh.png'}}
@@ -189,3 +201,15 @@ buttonImage:
   alignSelf:'center',
 }
 });
+
+const Stack = createStackNavigator();
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}

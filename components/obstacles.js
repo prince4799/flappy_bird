@@ -15,7 +15,7 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
            backgroundColor:color,
            borderWidth:2,
            borderColor:'black',
-           borderRadius:20,
+        //    borderRadius:20,
            position:'absolute',
            top:0,
         
@@ -29,8 +29,8 @@ export default function Obstacles({obstaclesWidth,obstaclesHeight,gap,color,rand
            left:obstaclesWidth,
            backgroundColor:color,
            borderWidth:2,
-           borderColor:'white',
-           borderRadius:20,
+           borderColor:'black',
+        //    borderRadius:20,
            position:'absolute',
            top:Height-(obstaclesHeight-random),
            bottom:0
