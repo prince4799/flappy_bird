@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useFocusEffect } from 'react';
 import { 
   StyleSheet,
     Text,
@@ -7,13 +7,18 @@ import {
     Dimensions,
     TouchableWithoutFeedback,
     TouchableOpacity,
-    Image
+    Image,
+    BackHandler,
+    Alert
    } from 'react-native';
 import Bird from './bird'
 import Obstacles from './obstacles'
 import { LinearGradient } from 'expo-linear-gradient';
 
 
+
+
+ 
 
  export default function HomeScreen({navigation}) {
   const screenWidth = Dimensions.get("screen").width
@@ -33,6 +38,7 @@ import { LinearGradient } from 'expo-linear-gradient';
   const [isGameOver,setGameOver]=useState(false)
 
   
+  
   useEffect(() => {
     if (birdBottom >0) {
       gameTimerId = setInterval(() => {
@@ -44,7 +50,33 @@ import { LinearGradient } from 'expo-linear-gradient';
     setBirdBottom(screenHeight/2)
   }, [birdBottom])
 
+  //===========================================
+
   
+  
+  useEffect(() => {
+    const backAction = () => {
+      Alert.alert("EXIT","Want to exit the Game?",[
+        {
+          text: "Cancel",
+          onPress: () => null,
+          style: "cancel"
+        },
+        { text: "YES", onPress: () => BackHandler.exitApp() }
+      ]);
+      return true;
+    };
+
+const backHandler = BackHandler.addEventListener("hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
+  
+  
+
+  //===========================================
 
   useEffect(() => {
     if (obstaclesRightSpace>-50)
@@ -124,7 +156,7 @@ if(
   return (
     <TouchableWithoutFeedback onPress={jump}>
     <LinearGradient
-    colors={['coral','orange']} style={styles.container}>
+    colors={['#f55d51','#f09a3e']} style={styles.container}>
       <Bird
         birdBottom={birdBottom}
         birdLeft={birdLeft} />
